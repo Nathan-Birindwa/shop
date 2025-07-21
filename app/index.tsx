@@ -1,12 +1,13 @@
-import { Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import '.././global.css';
+import { View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   return (
     <SafeAreaView>
-      <View className="">
-        <Text className="">Hello</Text>
+      {/* Navbar */}
+      <View>
+        {" "}
+        <Text>Hi</Text>
       </View>
     </SafeAreaView>
   );
