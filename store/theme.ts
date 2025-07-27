@@ -1,23 +1,29 @@
 import { create } from "zustand";
 
-type Theme = "light" | "dark ";
+type Theme = "light" | "dark";
 
 const useThemeStore = create((set) => ({
   theme: "light" as Theme,
   toggleTheme: () =>
-    useThemeStore.setState((state: any) => ({
+    set((state: any) => ({
       theme: state.theme === "light" ? "dark" : "light",
     })),
   colors: {
     light: {
       background: "#F5F5F5",
-      text: "#060505FF",
+      secBg: "#0215262D",
+      text: "#ffffff",
+      iconColor: "#F1EBEBFF",
       header: "#ffffff",
+      shadeBG: "#FFFFFF23",
     },
     dark: {
-      background: "#021526",
+      background: "#021526FF",
+      secBg: "#0215262D",
       text: "#ffffff",
-      header: "#05111CFF",
+      iconColor: "#FDFCFCFF",
+      header: "#05111C",
+      shadeBG: "#FFFFFF23",
     },
   },
 }));
