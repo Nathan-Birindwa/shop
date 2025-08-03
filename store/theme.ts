@@ -1,9 +1,10 @@
+// themeStore.ts
 import { create } from "zustand";
 
 type Theme = "light" | "dark";
 
 const useThemeStore = create((set) => ({
-  theme: "dark" as Theme,
+  theme: "light" as Theme,
   toggleTheme: () =>
     set((state: any) => ({
       theme: state.theme === "light" ? "dark" : "light",
@@ -19,17 +20,19 @@ const useThemeStore = create((set) => ({
       primary: "#EE4B6A",
       accent: "#34D399",
       warning: "#FBBF24",
+      brandIcons: "000000",
     },
     dark: {
       background: "#111827",
       secBg: "#1F2937",
-      text: "#F9FAFBC8",
+      text: "#FFFFFFC8",
       iconColor: "#D1D5DB",
       header: "#1F2937",
       shadeBG: "#374151",
       primary: "#EE4B6A",
       accent: "#10B981",
       warning: "#FBBF24",
+      brandIcons: "FFFFFF",
     },
   },
 }));

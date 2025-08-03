@@ -1,9 +1,8 @@
 import useThemeStore from "@/store/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useState } from "react";
 import {
-  FlatList,
   Image,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -11,145 +10,145 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-type Brand = {
-  id: number;
-  name: string;
-  img: string;
-};
-
-type ItemProps = {
-  title: string;
-  image: string;
-};
-
 export default function Home() {
   const country = "Uganda, Kampala";
-  const { theme, colors } = useThemeStore();
-  const currentColors = colors[theme];
+  const { theme, toggleTheme, colors } = useThemeStore();
 
-  const brands: Brand[] = [
+  const currentColors = colors[theme];
+  const brands = [
     {
       id: 1,
       name: "Nike",
-      img: "https://img.icons8.com/?size=100&id=16647&format=png&color=000000",
+      img: `https://img.icons8.com/?size=100&id=16647&format=png&color=${currentColors.brandIcons}`,
     },
     {
       id: 2,
       name: "Adidas",
-      img: "https://img.icons8.com/?size=100&id=16713&format=png&color=000000",
+      img: `https://img.icons8.com/?size=100&id=xvG0XAGwZarY&format=png&color=${currentColors.brandIcons}`,
     },
     {
       id: 3,
-      name: "Puma",
-      img: "https://img.icons8.com/?size=100&id=85487&format=png&color=000000",
+      name: "Gucci",
+      img: `https://img.icons8.com/?size=100&id=25272&format=png&color=${currentColors.brandIcons}`,
+    },
+    {
+      id: 4,
+      name: "Jordan",
+      img: `https://img.icons8.com/?size=100&id=45774&format=png&color=${currentColors.brandIcons}`,
+    },
+    {
+      id: 5,
+      name: "Jordan",
+      img: `https://img.icons8.com/?size=100&id=45774&format=png&color=${currentColors.brandIcons}`,
+    },
+    {
+      id: 6,
+      name: "Jordan",
+      img: `https://img.icons8.com/?size=100&id=45774&format=png&color=${currentColors.brandIcons}`,
     },
   ];
 
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-
-  const filteredBrands = selectedBrand
-    ? brands.filter((brand) => brand.name === selectedBrand)
-    : brands;
-
-  const Item = ({ title, image }: ItemProps) => (
-    <View className="items-center p-3">
-      <Image
-        source={{ uri: image }}
-        className="w-16 h-16 mb-2"
-        resizeMode="contain"
-      />
-      <Text style={{ color: currentColors.text }}>{title}</Text>
-    </View>
-  );
-
   return (
-    <SafeAreaView className="flex-1">
-      {/* Nav with search bar */}
-      <View>
-        <View className="flex flex-row justify-between p-5">
-          <Text
-            style={{ color: currentColors.text }}
-            className="font-medium mt-2 text-[16px]"
-          >
-            {country}
-          </Text>
-          <View className="flex flex-row gap-3">
-            <TouchableOpacity>
-              <Ionicons
-                name="chatbubble-outline"
-                size={24}
-                color={currentColors.text}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Ionicons
-                name="cart-outline"
-                size={24}
-                color={currentColors.text}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Search bar */}
-        <View className="flex items-center justify-center">
-          <View className="flex-row items-center bg-[#1B212FFF]/20 w-[95%] rounded-xl px-4 py-2">
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: currentColors.background }}
+    >
+      {/* Header */}
+      <View className="flex flex-row justify-between p-5">
+        <Text
+          style={{ color: currentColors.text }}
+          className="font-medium mt-2 text-[16px]"
+        >
+          {country}
+        </Text>
+        <View className="flex flex-row gap-3">
+          <TouchableOpacity>
             <Ionicons
-              name="search"
-              size={22}
-              color={currentColors.text}
-              className="mr-2"
+              style={{ color: currentColors.text }}
+              name="chatbubble-outline"
+              size={24}
             />
-            <TextInput
-              placeholder="Find your outfit or shoes"
-              placeholderTextColor={currentColors.text}
-              className="flex-1 text-[17px] text-white"
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Ionicons
+              style={{ color: currentColors.text }}
+              name="cart-outline"
+              size={24}
             />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
 
-      {/* Category buttons */}
-      <View className="mt-5 px-5">
-        <FlatList
-          horizontal
-          data={brands}
-          keyExtractor={(item) => item.id.toString()}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              onPress={() =>
-                setSelectedBrand((prev) =>
-                  prev === item.name ? null : item.name
-                )
-              }
-              className={`mr-3 px-4 py-2 rounded-full border ${
-                selectedBrand === item.name
-                  ? "bg-white border-white"
-                  : "border-gray-400"
-              }`}
-            >
-              <Text
-                className={`text-sm font-medium ${
-                  selectedBrand === item.name ? "text-black" : "text-white"
-                }`}
-              >
-                {item.name}
-              </Text>
-            </TouchableOpacity>
-          )}
-        />
+      {/* Search Bar */}
+      <View className="flex items-center  justify-center mb-6">
+        <View className="flex-row items-center bg-black/10 w-[95%] rounded-2xl px-4 py-2">
+          <Ionicons
+            name="search"
+            size={22}
+            color={currentColors.text}
+            className="mr-2"
+          />
+          <TextInput
+            placeholder="Find your outfit or shoes"
+            placeholderTextColor={currentColors.text}
+            className="flex-1 text-[17px]"
+            style={{ color: currentColors.text }}
+          />
+        </View>
       </View>
 
-      {/* Filtered Brand Items */}
-      <View className="mt-5 px-5">
-        <FlatList
+      {/* Brands Section */}
+      <View className="px-5">
+        <Text
+          style={{ color: currentColors.text }}
+          className="font-bold text-xl mb-4"
+        >
+          Shop by Brand
+        </Text>
+
+        {/* Brands Grid */}
+        <ScrollView
           horizontal
-          data={filteredBrands}
-          keyExtractor={(item) => item.id.toString()}
           showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => <Item title={item.name} image={item.img} />}
-        />
+          contentContainerStyle={{
+            paddingLeft: 12,
+            paddingRight: 12,
+            alignItems: "center",
+          }}
+        >
+          {brands.map((brand, idx) => (
+            <TouchableOpacity
+              key={brand.id}
+              style={{
+                minWidth: 100,
+                marginRight: idx === brands.length - 1 ? 0 : 16,
+              }}
+              className="bg-black/10 rounded-2xl mb-4"
+            >
+              <View
+                className="items-center p-3 rounded-xl"
+                style={{ backgroundColor: currentColors.surface }}
+              >
+                <Image
+                  className="h-12 w-12 mb-2"
+                  source={{ uri: brand.img }}
+                  resizeMode="contain"
+                />
+                <Text
+                  style={{ color: currentColors.text }}
+                  className="text-xs font-medium text-center"
+                  numberOfLines={1}
+                >
+                  {brand.name}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+
+          <View style={{ width: 8 }} />
+        </ScrollView>
+        <View>
+          <Tou
+        </View>
       </View>
     </SafeAreaView>
   );
