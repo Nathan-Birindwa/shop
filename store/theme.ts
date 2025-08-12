@@ -12,7 +12,7 @@ const useThemeStore = create((set) => ({
   colors: {
     light: {
       background: "#FFFFFF76",
-      secBg: "#FFFFFF",
+      secBg: "#00000014",
       text: "#111827",
       iconColor: "#374151",
       header: "#FFFFFF",
@@ -24,7 +24,7 @@ const useThemeStore = create((set) => ({
     },
     dark: {
       background: "#111827",
-      secBg: "#1F2937",
+      secBg: "#1F293772",
       text: "#FFFFFFC8",
       iconColor: "#D1D5DB",
       header: "#1F2937",

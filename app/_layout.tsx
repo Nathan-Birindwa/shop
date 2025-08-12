@@ -30,7 +30,9 @@ export default function RootLayout() {
             backgroundColor: themeColor.background,
           },
         }}
-      />
+      >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
       ;
     </>
   );
