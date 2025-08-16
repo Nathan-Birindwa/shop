@@ -4,7 +4,7 @@ import { create } from "zustand";
 type Theme = "light" | "dark";
 
 const useThemeStore = create((set) => ({
-  theme: "light" as Theme,
+  theme: "dark" as Theme,
   toggleTheme: () =>
     set((state: any) => ({
       theme: state.theme === "light" ? "dark" : "light",
