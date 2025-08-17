@@ -1,11 +1,21 @@
+import useThemeStore from "@/store/theme";
 import AntDesign from "@expo/vector-icons/AntDesign";
+
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 
 export default function TabLayout() {
+  const { theme, colors } = useThemeStore();
+  const currentColors = colors[theme];
   return (
     <Tabs
-      screenOptions={{ tabBarActiveTintColor: "#EE4B6A", headerShown: false }}
+      screenOptions={{
+        tabBarActiveTintColor: "#EE4B6A",
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: currentColors.background,
+        },
+      }}
     >
       <Tabs.Screen
         name="index"
@@ -17,7 +27,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="chat"
         options={{
           title: "Settings",
           tabBarIcon: ({ color }) => (

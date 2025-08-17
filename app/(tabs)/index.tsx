@@ -1,5 +1,6 @@
 import useThemeStore from "@/store/theme";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   Image,
@@ -55,6 +56,7 @@ export default function Home() {
   const { theme, colors } = useThemeStore();
   const currentColors = colors[theme];
   const [wishlist, setWishlist] = useState<string[]>([]);
+  const router = useRouter();
 
   const toggleWishlist = (id: string) => {
     setWishlist((prev) =>
@@ -169,7 +171,8 @@ export default function Home() {
 
         <View className="flex-row flex-wrap justify-between">
           {products.map((item) => (
-            <View
+            <TouchableOpacity
+              onPress={() => router.push("/productView")}
               key={item.id}
               className="w-[48%] mb-4 rounded-xl overflow-hidden"
               style={{ backgroundColor: currentColors.secBg }}
@@ -224,7 +227,7 @@ export default function Home() {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       </ScrollView>
