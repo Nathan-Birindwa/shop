@@ -1,25 +1,34 @@
 import useThemeStore from "@/store/theme";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
 import Checkbox from "expo-checkbox";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SignUp() {
   const router = useRouter();
   const { theme, colors } = useThemeStore();
   const currentColors = colors[theme];
+
+  const [error, setError] = useState("");
   const [isChecked, setChecked] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // 👈 NEW loading state
+
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-
-  // Input data
 
   function handleChange(name: string, value: string) {
     setFormData((prev) => ({
@@ -28,15 +37,29 @@ export default function SignUp() {
     }));
   }
 
-  // Show password button
-  function handleShowPassword (){
-    setShowPassword((prev) => !prev)
+  function handleShowPassword() {
+    setShowPassword((prev) => !prev);
   }
 
-  // Submit button
-  function handleSubmit() {
-    console.log(formData);
-    alert(formData.email);
+  async function handleSubmit() {
+    setLoading(true); // start loading
+    setError(""); // clear any old error
+
+    try {
+      const res = await axios.post(
+        "http://192.168.1.9:3000/api/signup",
+        formData
+      );
+      console.log("User created:", res.data);
+
+      // maybe navigate after success
+      router.push("/signin");
+    } catch (err: any) {
+      console.error("Error submitting data:", err.data.message);
+      setError("Could not submit your information, try again");
+    } finally {
+      setLoading(false); // stop loading
+    }
   }
 
   return (
@@ -71,10 +94,7 @@ export default function SignUp() {
             <TextInput
               className="flex-1 ml-3"
               placeholderTextColor={currentColors.text}
-              style={{
-                color: currentColors.text,
-                fontSize: 14,
-              }}
+              style={{ color: currentColors.text, fontSize: 14 }}
               placeholder="Email Address"
               keyboardType="email-address"
               autoCapitalize="none"
@@ -98,10 +118,7 @@ export default function SignUp() {
             <TextInput
               className="flex-1 ml-3"
               placeholderTextColor={currentColors.text}
-              style={{
-                // color: currentColors.text,
-                fontSize: 14,
-              }}
+              style={{ fontSize: 14 }}
               placeholder="Full Name"
               autoCapitalize="words"
               value={formData.fullName}
@@ -125,24 +142,19 @@ export default function SignUp() {
             <TextInput
               className="flex-1 ml-3"
               placeholderTextColor={currentColors.text}
-              style={{
-                color: currentColors.text,
-                fontSize: 14,
-              }}
+              style={{ color: currentColors.text, fontSize: 14 }}
               placeholder="Password"
-              secureTextEntry={true}
+              secureTextEntry={!showPassword}
               autoCapitalize="none"
               value={formData.password}
               onChangeText={(text) => handleChange("password", text)}
             />
             <TouchableOpacity onPress={handleShowPassword}>
-              {showPassword : (
-                <Ionicons
-                name="eye-off-outline"
+              <Ionicons
+                name={showPassword ? "eye-off-outline" : "eye-outline"}
                 size={20}
                 color={currentColors.iconColor}
               />
-              )}
             </TouchableOpacity>
           </View>
         </View>
@@ -161,19 +173,16 @@ export default function SignUp() {
             <TextInput
               className="flex-1 ml-3"
               placeholderTextColor={currentColors.text}
-              style={{
-                color: currentColors.text,
-                fontSize: 14,
-              }}
+              style={{ color: currentColors.text, fontSize: 14 }}
               placeholder="Confirm Password"
-              secureTextEntry={true}
+              secureTextEntry={!showPassword}
               autoCapitalize="none"
               value={formData.confirmPassword}
               onChangeText={(text) => handleChange("confirmPassword", text)}
             />
-            <TouchableOpacity onPress={handleShowPassword}> 
+            <TouchableOpacity onPress={handleShowPassword}>
               <Ionicons
-                name="eye-outline"
+                name={showPassword ? "eye-off-outline" : "eye-outline"}
                 size={20}
                 color={currentColors.iconColor}
               />
@@ -188,7 +197,6 @@ export default function SignUp() {
             color={currentColors.primary}
             onValueChange={setChecked}
           />
-
           <Text
             style={{ color: currentColors.text }}
             className="flex-1 text-xs leading-5"
@@ -202,88 +210,36 @@ export default function SignUp() {
           </Text>
         </View>
 
+        {/* Error message */}
+        <Text
+          className={
+            error
+              ? "text-[12px] text-white bg-red-600 mt-5 p-2 rounded-sm"
+              : "bg-none p-0 text-transparent"
+          }
+        >
+          {error}
+        </Text>
+
         {/* Sign Up Button */}
         <TouchableOpacity
-          onPress={() => handleSubmit()}
+          onPress={handleSubmit}
+          disabled={loading} // disable while loading
           className="mx-3 mt-8 py-4 rounded-2xl items-center"
-          style={{ backgroundColor: currentColors.primary }}
+          style={{
+            backgroundColor: loading
+              ? currentColors.iconColor
+              : currentColors.primary,
+          }}
         >
-          <Text className="text-white font-semibold text-base">
-            Create Account
-          </Text>
-        </TouchableOpacity>
-
-        {/* Divider */}
-        <View className="flex-row items-center mx-3 mt-8">
-          <View
-            className="flex-1 h-px"
-            style={{ backgroundColor: currentColors.iconColor + "30" }}
-          />
-          <Text
-            style={{ color: currentColors.text }}
-            className="mx-4 text-xs opacity-60"
-          >
-            Or continue with
-          </Text>
-          <View
-            className="flex-1 h-px"
-            style={{ backgroundColor: currentColors.iconColor + "30" }}
-          />
-        </View>
-
-        {/* Social Login Buttons */}
-        <View className="flex-row justify-center mt-6 space-x-4">
-          <TouchableOpacity
-            className="w-12 h-12 rounded-full items-center justify-center"
-            style={{ backgroundColor: currentColors.secBg }}
-          >
-            <Ionicons
-              name="logo-google"
-              size={24}
-              color={currentColors.iconColor}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            className="w-12 h-12 rounded-full items-center justify-center ml-4"
-            style={{ backgroundColor: currentColors.secBg }}
-          >
-            <Ionicons
-              name="logo-apple"
-              size={24}
-              color={currentColors.iconColor}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            className="w-12 h-12 rounded-full items-center justify-center ml-4"
-            style={{ backgroundColor: currentColors.secBg }}
-          >
-            <Ionicons
-              name="logo-facebook"
-              size={24}
-              color={currentColors.iconColor}
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* Sign In Link */}
-        <View className="flex-row justify-center mt-8 mb-4">
-          <Text
-            style={{ color: currentColors.text }}
-            className="text-sm opacity-70"
-          >
-            Already have an account?{" "}
-          </Text>
-          <TouchableOpacity onPress={() => router.push("/signin")}>
-            <Text
-              style={{ color: currentColors.primary }}
-              className="text-sm font-semibold"
-            >
-              Sign In
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text className="text-white font-semibold text-base">
+              Create Account
             </Text>
-          </TouchableOpacity>
-        </View>
+          )}
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
