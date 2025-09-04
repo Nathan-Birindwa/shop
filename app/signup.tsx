@@ -11,6 +11,33 @@ export default function SignUp() {
   const { theme, colors } = useThemeStore();
   const currentColors = colors[theme];
   const [isChecked, setChecked] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  // Input data
+
+  function handleChange(name: string, value: string) {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
+  // Show password button
+  function handleShowPassword (){
+    setShowPassword((prev) => !prev)
+  }
+
+  // Submit button
+  function handleSubmit() {
+    console.log(formData);
+    alert(formData.email);
+  }
 
   return (
     <SafeAreaView
@@ -51,6 +78,8 @@ export default function SignUp() {
               placeholder="Email Address"
               keyboardType="email-address"
               autoCapitalize="none"
+              value={formData.email}
+              onChangeText={(text) => handleChange("email", text)}
             />
           </View>
         </View>
@@ -75,6 +104,8 @@ export default function SignUp() {
               }}
               placeholder="Full Name"
               autoCapitalize="words"
+              value={formData.fullName}
+              onChangeText={(text) => handleChange("fullName", text)}
             />
           </View>
         </View>
@@ -90,6 +121,7 @@ export default function SignUp() {
               size={20}
               color={currentColors.iconColor}
             />
+
             <TextInput
               className="flex-1 ml-3"
               placeholderTextColor={currentColors.text}
@@ -100,12 +132,18 @@ export default function SignUp() {
               placeholder="Password"
               secureTextEntry={true}
               autoCapitalize="none"
+              value={formData.password}
+              onChangeText={(text) => handleChange("password", text)}
             />
-            <Ionicons
-              name="eye-off-outline"
-              size={20}
-              color={currentColors.iconColor}
-            />
+            <TouchableOpacity onPress={handleShowPassword}>
+              {showPassword : (
+                <Ionicons
+                name="eye-off-outline"
+                size={20}
+                color={currentColors.iconColor}
+              />
+              )}
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -130,12 +168,16 @@ export default function SignUp() {
               placeholder="Confirm Password"
               secureTextEntry={true}
               autoCapitalize="none"
+              value={formData.confirmPassword}
+              onChangeText={(text) => handleChange("confirmPassword", text)}
             />
-            <Ionicons
-              name="eye-off-outline"
-              size={20}
-              color={currentColors.iconColor}
-            />
+            <TouchableOpacity onPress={handleShowPassword}> 
+              <Ionicons
+                name="eye-outline"
+                size={20}
+                color={currentColors.iconColor}
+              />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -162,6 +204,7 @@ export default function SignUp() {
 
         {/* Sign Up Button */}
         <TouchableOpacity
+          onPress={() => handleSubmit()}
           className="mx-3 mt-8 py-4 rounded-2xl items-center"
           style={{ backgroundColor: currentColors.primary }}
         >
